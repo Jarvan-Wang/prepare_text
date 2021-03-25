@@ -6,7 +6,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from importlib import reload
 reload(sys)
 from fenci.segjb import jieba_segment
-from remove_punctuation import remove_punctuation_wrap, remove_marksign_wrap
+from remove_punctuation import remove_punctuation_wrap, remove_marksign
 from half_width2full_width import half_width2full_width
 from oovword2char import oovword2char_wrap
 full_width=False
