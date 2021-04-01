@@ -2,28 +2,18 @@
 import sys
 import argparse
 import re
-def oovword2char_wrap(line, word_list, utt2text=True):
-	if utt2text:
-		uttid, line = line.split(sep=" ", maxsplit=1)
-	new_words, _, oov_chars = oovword2char(line, word_list)
-	if utt2text:
-		line = " ".join([uttid] + new_words)
-	else:
-		line = " ".join(new_words)
+def oovword2char_wrap(line, word_list):
+	uttid, line = line.split(sep=" ", maxsplit=1)
+	line = oovword2char(line, word_list)
+	line = uttid + " " + line
+def oovword2char(line, word_list):
+	new_words, _, oov_chars = oovword2char_impl(line, word_list)
+	line = " ".join(new_words)
 	if len(oov_chars) == 0:
 		return line
 	else:
 		return None
-def oovword2char_wrap_with_oov(line, word_list, utt2text=True):
-	if utt2text:
-		uttid, line = line.split(sep=" ", maxsplit=1)
-	new_words, _, oov_chars = oovword2char(line, word_list)
-	if utt2text:
-		line = " ".join([uttid] + new_words)
-	else:
-		line = " ".join(new_words)
-	return line
-def oovword2char(line, word_list):
+def oovword2char_impl(line, word_list):
 	if type(line) is str:
 		line = line.rstrip().split(" ")
 	new_words = []

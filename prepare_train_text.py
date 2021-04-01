@@ -2,37 +2,32 @@
 import sys,os
 import argparse
 #sys.path.append('./')
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+sys.path.insert(0, os.path.dirname(os.path.realpath(__file__)))
 from importlib import reload
 reload(sys)
 from fenci.segjb import jieba_segment
-from remove_punctuation import remove_punctuation_wrap, remove_marksign
-from half_width2full_width import half_width2full_width
-from oovword2char import oovword2char_wrap
+from remove_punctuation import remove_punctuation, remove_marksign
+from char_width_convert import half_width2full_width
+from oovword2char import oovword2char
 full_width=False
 def isempty(line):
-	return line is None or len(line.split())==1
-def tolowercase(line):
-	uttid, line = line.split(sep=" ", maxsplit=1)
-	return uttid + " " + line.lower()
+	return line is None
 def prepare_line(line, word_list):
 	if isempty(line):
 		return None
-	line = remove_marksign_wrap(line)
+	line = remove_marksign(line)
 	if isempty(line):
 		return None
 	line = jieba_segment(line)
 	if isempty(line):
 		return None
-	line = remove_punctuation_wrap(line)
+	line = remove_punctuation(line)
 	if isempty(line):
 		return None
 	if full_width:
 		line = half_width2full_width(line)
-	line = tolowercase(line)
-	if isempty(line):
-		return None
-	line = oovword2char_wrap(line, word_list)
+	line = line.lower()
+	line = oovword2char(line, word_list)
 	if isempty(line):
 		return None
 	return line
@@ -70,10 +65,13 @@ if __name__ == "__main__":
 		i=0
 		for line in f_in:
 			i+=1
+			line = line.rstrip()
 			#sys.stdout.write(f"Debug: prepare {i}th line\033[0K\r")
 			#print(f"Debug: prepare {i}th line")
 			try:
-				line = prepare_line(line, word_list)
+				utt, text = line.split(' ', maxsplit=1)
+				line = prepare_line(text, word_list)
+				line = "{} {}".format(utt, text)
 			except:
 				print(f"Exception catched: {i}th line : {line}")
 				continue

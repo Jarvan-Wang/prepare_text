@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import re,argparse,sys
-def strQ2B(ustring):
+def full_width2half_width(ustring):
     """全角转半角"""
     rstring = ""
     for uchar in ustring:
@@ -14,7 +14,7 @@ def strQ2B(ustring):
         rstring += chr(inside_code)
     return rstring
     
-def strB2Q(ustring):
+def half_width2full_width(ustring):
     """半角转全角"""
     rstring = ""
     for uchar in ustring:
@@ -26,12 +26,19 @@ def strB2Q(ustring):
 
         rstring += chr(inside_code)
     return rstring
-def full_width2half_width(line):
-	return strQ2B(line)
+def full_width2half_width_wrap(s):
+	uttid, s = s.split(sep=" ", maxsplit=1)
+	s = full_width2width_width(s)
+	return uttid + " " + s
+def half_width2full_width_wrap(s):
+	uttid, s = s.split(sep=" ", maxsplit=1)
+	s = half_width2full_width(s)
+	return uttid + " " + s
 
 if __name__ == "__main__":
-	parser = argparse.ArgumentParser(description="Change full-width alphabet to half-width alphabet in text.")
+	parser = argparse.ArgumentParser(description="Change half-width alphabet to full-width alphabet in text.")
 	parser.add_argument("--field_begin", type=int)
+	parser.add_argument("--func", default="full_width2half_width_wrap")
 	parser.add_argument("input_transcription",
 	                    help="Input Transcription")
 	parser.add_argument("output_transcription",
@@ -40,6 +47,6 @@ if __name__ == "__main__":
 	with open(args.input_transcription, encoding='gbk') as f_in, open(args.output_transcription, "w", encoding='gbk') as f_out:
 		for line in f_in:
 			splits = line.split()
-			target = [strQ2B(split) for split in splits[args.field_begin:]]
+			target = [eval(args.func)(split) for split in splits[args.field_begin:]]
 			new_line = " ".join(splits[0:args.field_begin]+target)
 			f_out.write(new_line + '\n')

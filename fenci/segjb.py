@@ -11,10 +11,8 @@ from . import jieba
 #sys.setdefaultencoding('utf-8')
 re_han = re.compile(r"([\u4E00-\u9FD5]+)",re.U)
 def jieba_segment(line):
-    line = line.strip()
-    uttid, sentence = line.split(sep=" ", maxsplit=1)
     #sentence = sentence.decode('utf-8')
-    blocks = re_han.split(sentence)
+    blocks = re_han.split(line)
     seg_sentence = []
     for blk in blocks:
         blk = blk.strip("\n")
@@ -23,7 +21,7 @@ def jieba_segment(line):
             seg_sentence.append(" ".join(seg_list))
         elif blk != " ":
             seg_sentence.append(blk)
-    return " ".join([uttid] + seg_sentence).strip()
+    return " ".join(seg_sentence).strip()
 def main(text, new_text):
     with open(text) as f_in, open(new_text, 'w') as f_out:
         for line in f_in:
