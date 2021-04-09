@@ -70,10 +70,12 @@ if __name__ == "__main__":
 			#print(f"Debug: prepare {i}th line")
 			try:
 				utt, text = line.split(' ', maxsplit=1)
-				line = prepare_line(text, word_list)
-				line = "{} {}".format(utt, text)
+				text = prepare_line(text, word_list)
+				if text is not None:
+					line = "{} {}".format(utt, text)
+					f_out.write(line+'\n')
+				else:
+					raise
 			except:
-				print(f"Exception catched: {i}th line : {line}")
+				#print(f"Exception catched: {i}th line")
 				continue
-			if line is not None:
-				f_out.write(line+'\n')
