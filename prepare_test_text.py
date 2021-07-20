@@ -74,10 +74,8 @@ if __name__ == "__main__":
 		for line in f_in:
 			i+=1
 			line = line.rstrip()
-			#sys.stdout.write(f"Debug: prepare {i}th line\033[0K\r")
-			#print(f"Debug: prepare {i}th line")
 			try:
-				utt, text = line.split(' ', maxsplit=1)
+				utt, text = line.split(maxsplit=1)
 				text = prepare_line(text)
 				line = "{} {}".format(utt, text)
 			except:
