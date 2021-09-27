@@ -12,7 +12,8 @@ def remove_punctuation_wrap(s, utt2text=True):
 	else:
 		return s
 def remove_punctuation(s):
-	return re.sub("[{}]+".format(en_punctuation+zh_punctuation)," ",s.strip())
+	#return re.sub("[{}]+".format(en_punctuation+zh_punctuation)," ",s.strip())
+	return re.sub("[{}]+".format(en_punctuation.replace("'","")+zh_punctuation)," ",s.strip())
 def remove_marksign_wrap(s):
 	if utt2text:
 		uttid, s = s.split(sep=" ", maxsplit=1)

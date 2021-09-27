@@ -76,6 +76,11 @@ if __name__ == "__main__":
 			line = line.rstrip()
 			try:
 				utt, text = line.split(maxsplit=1)
+			except:
+				utt = line
+				text = ""
+				print(f"Warning: Utterance {utt} has empty text: {line}")
+			try:
 				text = prepare_line(text)
 				line = "{} {}".format(utt, text)
 			except:
